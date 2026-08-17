@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerdantLens — Ecological Intelligence Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f7f4;
+            color: #1a2e1a;
+        }
+        .serif-font {
+            font-family: 'Newsreader', serif;
+        }
+        .organic-card {
+            background: #ffffff;
+            border: 1px solid #d8e2d8;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px -2px rgba(27, 67, 50, 0.05);
+            transition: all 0.3s ease;
+        }
+        .organic-card:hover {
+            box-shadow: 0 10px 30px -4px rgba(27, 67, 50, 0.08);
+            border-color: #b7cbb7;
+        }
+        .tab-btn.active {
+            background-color: #1b4332;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(27, 67, 50, 0.2);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef2ee;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c2d6c2;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-emerald-900/10 sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-[#1b4332] flex items-center justify-center text-white font-bold text-xl shadow-md">🌿</div>
+            <div>
+                <h1 class="font-bold text-lg tracking-tight text-[#1b4332]">VerdantLens</h1>
+                <p class="text-xs text-emerald-700/70 font-medium">Ecosystem Telemetry & Field Research</p>
+            </div>
+        </div>
+
+        <!-- XP & Level Widget -->
+        <div class="flex items-center space-x-4">
+            <div class="bg-emerald-50 border border-emerald-200/60 px-4 py-2 rounded-2xl flex items-center space-x-3">
+                <div class="text-xs uppercase tracking-wider text-emerald-800 font-bold">Level <span id="user-level">2</span></div>
+                <div class="w-28 bg-emerald-200/50 h-2.5 rounded-full overflow-hidden">
+                    <div id="xp-bar" class="bg-[#2d6a4f] h-full rounded-full transition-all duration-500" style="width: 65%;"></div>
+                </div>
+                <div class="text-xs font-bold text-emerald-900"><span id="user-xp">320</span>/500 XP</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="bg-white border-b border-emerald-900/5 px-6 py-3 flex space-x-2 overflow-x-auto">
+        <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn active px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 cursor-pointer">Live Dashboard</button>
+        <button onclick="switchTab('quests')" id="btn-quests" class="tab-btn px-5 py-2.5 rounded-xl font-semibold text-sm text-emerald-900/70 hover:bg-emerald-50 transition-all duration-200 cursor-pointer">Daily Quests & AI Scan</button>
+        <button onclick="switchTab('audit')" id="btn-audit" class="tab-btn px-5 py-2.5 rounded-xl font-semibold text-sm text-emerald-900/70 hover:bg-emerald-50 transition-all duration-200 cursor-pointer">Lawn Audit & Challenges</button>
+    </nav>
+
+    <!-- Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8">
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Temperature Widget -->
+                <div class="organic-card p-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-semibold text-emerald-800/70 uppercase tracking-wider">Air Temperature</span>
+                        <span class="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 text-lg">🌡️</span>
+                    </div>
+                    <div class="my-6">
+                        <div class="text-4xl font-extrabold text-[#1b4332]" id="metric-temp">--°C</div>
+                        <p class="text-xs text-emerald-700/70 mt-1">Real-time microclimate sensor</p>
+                    </div>
+                    <div class="w-full bg-emerald-100/60 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-600 h-full w-3/5"></div>
+                    </div>
+                </div>
+
+                <!-- Humidity Widget -->
+                <div class="organic-card p-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-semibold text-emerald-800/70 uppercase tracking-wider">Relative Humidity</span>
+                        <span class="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 text-lg">💧</span>
+                    </div>
+                    <div class="my-6">
+                        <div class="text-4xl font-extrabold text-[#1b4332]" id="metric-humidity">--%</div>
+                        <p class="text-xs text-emerald-700/70 mt-1">Optimal growth threshold active</p>
+                    </div>
+                    <div class="w-full bg-emerald-100/60 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-600 h-full w-2/3"></div>
+                    </div>
+                </div>
+
+                <!-- Soil Moisture Widget -->
+                <div class="organic-card p-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-semibold text-emerald-800/70 uppercase tracking-wider">Soil Moisture</span>
+                        <span class="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 text-lg">🌱</span>
+                    </div>
+                    <div class="my-6">
+                        <div class="text-4xl font-extrabold text-[#1b4332]" id="metric-soil">--%</div>
+                        <p class="text-xs text-emerald-700/70 mt-1" id="soil-status">Calibrating probe...</p>
+                    </div>
+                    <div class="w-full bg-emerald-100/60 h-1.5 rounded-full overflow-hidden">
+                        <div id="soil-bar" class="bg-emerald-600 h-full w-1/2 transition-all"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Feed / Quick Status -->
+            <div class="organic-card p-6">
+                <h3 class="font-bold text-lg text-[#1b4332] mb-2">Telemetry Stream Status</h3>
+                <p class="text-sm text-emerald-800/80 mb-4">Connected to active hardware endpoint. Streaming live packets securely over local network protocol.</p>
+                <div class="bg-[#1b4332] text-emerald-100 p-4 rounded-xl font-mono text-xs overflow-x-auto" id="terminal-log">
+                    [System] Initialized telemetry listener on port 5000...<br>
+                    [Device] Listening for hardware handshakes (ESP32_PROBE_01)...
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: DAILY QUESTS & AI PHOTO VERIFICATION -->
+        <section id="tab-quests" class="hidden space-y-6">
+            <div class="organic-card p-8">
+                <div class="max-w-2xl">
+                    <h2 class="text-2xl font-bold text-[#1b4332] serif-font italic">Field Research & Daily Quests</h2>
+                    <p class="text-sm text-emerald-800/80 mt-1 mb-6">Upload photographic proof of your ecological findings. Our Gemini-powered computer vision model will analyze your photo, verify the objective, and grant XP rewards directly to your profile.</p>
+                </div>
+
+                <!-- Quest Selector Card -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="border-2 border-emerald-600 bg-emerald-50/50 p-5 rounded-2xl cursor-pointer relative">
+                        <span class="absolute top-4 right-4 bg-emerald-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">+50 XP</span>
+                        <h4 class="font-bold text-[#1b4332]">Quest 1: Native Flora Spotting</h4>
+                        <p class="text-xs text-emerald-800/80 mt-1">Locate and photograph an indigenous plant or wildflower in your local environment.</p>
+                    </div>
+                    <div class="border border-emerald-200 bg-white p-5 rounded-2xl cursor-pointer hover:border-emerald-400 transition">
+                        <span class="absolute top-4 right-4 bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">+75 XP</span>
+                        <h4 class="font-bold text-[#1b4332]">Quest 2: Pollinator Habitat Audit</h4>
+                        <p class="text-xs text-emerald-800/80 mt-1">Capture an image showing a micro-habitat supporting bees, butterflies, or beneficial insects.</p>
+                    </div>
+                </div>
+
+                <!-- Upload Form -->
+                <div class="bg-emerald-900/5 border border-emerald-900/10 p-6 rounded-2xl space-y-4">
+                    <label class="block text-sm font-bold text-[#1b4332]">Upload Photo Proof for Verification</label>
+                    <input type="file" id="quest-file" accept="image/*" class="block w-full text-sm text-emerald-900 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#1b4332] file:text-white hover:file:bg-[#2d6a4f] cursor-pointer">
+                    
+                    <button onclick="submitQuestPhoto()" id="verify-btn" class="w-full py-3 px-6 rounded-xl bg-[#1b4332] text-white font-bold hover:bg-[#2d6a4f] transition shadow-md cursor-pointer flex items-center justify-center space-x-2">
+                        <span>Analyze & Verify with AI Vision</span>
+                    </button>
+                </div>
+
+                <!-- AI Response Box -->
+                <div id="ai-response-container" class="hidden mt-6 p-6 rounded-2xl border border-emerald-200 bg-emerald-50/80 space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <span id="ai-status-icon" class="text-xl">✨</span>
+                        <h4 class="font-bold text-[#1b4332]" id="ai-result-title">Verification Successful!</h4>
+                    </div>
+                    <p class="text-sm text-emerald-900" id="ai-result-desc">Analyzing observation details...</p>
+                    <div class="bg-white p-4 rounded-xl border border-emerald-200/60 text-xs font-mono text-emerald-800" id="ai-json-output"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: EXPANDED LAWN AUDIT & CHALLENGES -->
+        <section id="tab-audit" class="hidden space-y-6">
+            <div class="organic-card p-8 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#1b4332] serif-font italic">The Manicured Lawn Impact Questionnaire</h2>
+                    <p class="text-sm text-emerald-800/80 mt-1">Traditional monoculture lawns carry heavy ecological footprints through chemical inputs, water waste, and biodiversity loss. Complete this comprehensive audit to calculate local habitat score and unlock resilience challenges.</p>
+                </div>
+
+                <!-- Multi-questionnaire form -->
+                <div class="space-y-6 border-t border-emerald-900/10 pt-6">
+                    <div class="space-y-2">
+                        <label class="block font-semibold text-sm text-[#1b4332]">1. What percentage of your immediate ground area is dedicated to non-native manicured grass turf?</label>
+                        <select id="q1" class="w-full p-3 rounded-xl border border-emerald-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4332]">
+                            <option value="high">Over 80% (High Monoculture)</option>
+                            <option value="medium">40% - 80% (Mixed Landscaping)</option>
+                            <option value="low">Under 40% (Diverse Native Flora / Wildscaping)</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block font-semibold text-sm text-[#1b4332]">2. Frequency of synthetic chemical fertilizer and pesticide application:</label>
+                        <select id="q2" class="w-full p-3 rounded-xl border border-emerald-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4332]">
+                            <option value="frequent">Monthly or more frequent</option>
+                            <option value="seasonal">1–2 times per year</option>
+                            <option value="none">Zero synthetic chemicals used</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block font-semibold text-sm text-[#1b4332]">3. Water management and irrigation strategy:</label>
+                        <select id="q3" class="w-full p-3 rounded-xl border border-emerald-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4332]">
+                            <option value="heavy">Daily automated sprinklers during peak hours</option>
+                            <option value="moderate">Timed drip irrigation or smart controllers</option>
+                            <option value="drought">Rainwater catchment or drought-tolerant native xeriscaping</option>
+                        </select>
+                    </div>
+
+                    <button onclick="calculateAuditScore()" class="py-3 px-6 rounded-xl bg-[#1b4332] text-white font-bold hover:bg-[#2d6a4f] transition shadow-md cursor-pointer">
+                        Generate Ecological Impact Report
+                    </button>
+                </div>
+
+                <!-- Audit Results Display -->
+                <div id="audit-results" class="hidden p-6 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-4">
+                    <h3 class="font-bold text-lg text-[#1b4332]">Ecosystem Resilience Scorecard</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-emerald-200">
+                            <span class="text-xs font-bold text-emerald-800 uppercase">Biodiversity Index</span>
+                            <div class="text-2xl font-extrabold text-[#1b4332] mt-1" id="score-biodiversity">-- / 100</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-emerald-200">
+                            <span class="text-xs font-bold text-emerald-800 uppercase">Resource Efficiency</span>
+                            <div class="text-2xl font-extrabold text-[#1b4332] mt-1" id="score-resources">-- / 100</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-emerald-900" id="audit-feedback">Complete the audit above to unlock personalized recommendations and earn bonus XP.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-emerald-900/10 py-6 px-6 text-center text-xs text-emerald-800/60 font-medium">
+        VerdantLens Platform &bull; Designed for Ecological Discovery & Field Telemetry
+    </footer>
+
+    <!-- Script Logic -->
+    <script>
+        let currentXP = 320;
+        let currentLevel = 2;
+
+        function updateXP(amount) {
+            currentXP += amount;
+            if (currentXP >= 500) {
+                currentXP -= 500;
+                currentLevel++;
+                alert('🎉 Level Up! You reached Level ' + currentLevel + '!');
+            }
+            document.getElementById('user-xp').innerText = currentXP;
+            document.getElementById('user-level').innerText = currentLevel;
+            document.getElementById('xp-bar').style.width = (currentXP / 500 * 100) + '%';
+        }
+
+        function switchTab(tabId) {
+            ['dashboard', 'quests', 'audit'].forEach(t => {
+                document.getElementById('tab-' + t).classList.add('hidden');
+                document.getElementById('btn-' + t).classList.remove('active', 'bg-[#1b4332]', 'text-white');
+                document.getElementById('btn-' + t).classList.add('text-emerald-900/70', 'hover:bg-emerald-50');
+            });
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-emerald-900/70', 'hover:bg-emerald-50');
+        }
+
+        // Live polling of sensor data from backend
+        async function fetchSensorData() {
+            try {
+                const res = await window.fetch('/api/sensor/live');
+                const data = await res.json();
+                document.getElementById('metric-temp').innerText = data.temperature + '°C';
+                document.getElementById('metric-humidity').innerText = data.humidity + '%';
+                document.getElementById('metric-soil').innerText = data.soilMoisture + '%';
+                document.getElementById('soil-bar').style.width = Math.min(Math.max(data.soilMoisture, 5), 100) + '%';
+                
+                const logDiv = document.getElementById('terminal-log');
+                logDiv.innerHTML += `<br>[${new Date().toLocaleTimeString()}] Packet received from ${data.deviceId} — Temp: ${data.temperature}°C, Hum: ${data.humidity}%, Soil: ${data.soilMoisture}%`;
+                logDiv.scrollTop = logDiv.scrollHeight;
+            } catch (err) {
+                console.log('Telemetry poll waiting...');
+            }
+        }
+        setInterval(fetchSensorData, 5000);
+        fetchSensorData();
+
+        // AI Quest Photo Verification Pipeline
+        async function submitQuestPhoto() {
+            const fileInput = document.getElementById('quest-file');
+            if (!fileInput.files[0]) {
+                alert('Please select an image file first.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+
+            const btn = document.getElementById('verify-btn');
+            btn.innerText = 'Analyzing Image with Gemini AI...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                const container = document.getElementById('ai-response-container');
+                container.classList.remove('hidden');
+
+                if (result.success && result.data && result.data.primaryFeature) {
+                    const feat = result.data.primaryFeature;
+                    document.getElementById('ai-result-title').innerText = 'Quest Verified: ' + feat.label;
+                    document.getElementById('ai-result-desc').innerText = feat.observation;
+                    document.getElementById('ai-json-output').innerText = JSON.stringify(feat, null, 2);
+                    
+                    updateXP(50);
+                } else {
+                    document.getElementById('ai-result-title').innerText = 'Verification Inconclusive';
+                    document.getElementById('ai-result-desc').innerText = 'The AI could not clearly identify target ecological features. Try another photo.';
+                    document.getElementById('ai-json-output').innerText = JSON.stringify(result, null, 2);
+                }
+            } catch (err) {
+                alert('Error uploading and scanning image: ' + err.message);
+            } finally {
+                btn.innerText = 'Analyze & Verify with AI Vision';
+                btn.disabled = false;
+            }
+        }
+
+        // Audit calculation
+        function calculateAuditScore() {
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const q3 = document.getElementById('q3').value;
+
+            let bio = 50;
+            let res = 50;
+
+            if (q1 === 'high') bio -= 30;
+            if (q1 === 'low') bio += 35;
+            if (q2 === 'frequent') res -= 30;
+            if (q2 === 'none') res += 35;
+            if (q3 === 'heavy') res -= 20;
+            if (q3 === 'drought') res += 30;
+
+            bio = Math.min(Math.max(bio, 10), 98);
+            res = Math.min(Math.max(res, 15), 95);
+
+            document.getElementById('audit-results').classList.remove('hidden');
+            document.getElementById('score-biodiversity').innerText = bio + ' / 100';
+            document.getElementById('score-resources').innerText = res + ' / 100';
+            document.getElementById('audit-feedback').innerText = bio > 70 ? 'Excellent ecological stewardship! Your landscape actively supports local native pollinators and soil health.' : 'High dependency on monoculture management. Consider replacing 30% of turf with native perennials to boost ecological resilience.';
+            
+            updateXP(30);
+        }
+    </script>
+</body>
+</html>
